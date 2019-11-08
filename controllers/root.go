@@ -3,6 +3,8 @@ package controllers
 import (
 	"net/http"
 
+	"moneyrate/model"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +18,7 @@ func Root(c *gin.Context) {
 // Login provides data for Login page
 func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"user": "IN DEVELOPMENT",
+		"user":    model.User{},
+		"message": "Sucess!",
 	})
 }
