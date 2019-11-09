@@ -10,4 +10,5 @@ import (
 func Attach(router *gin.Engine) {
 	router.GET("/", controllers.Root)
 	router.GET("/login", controllers.Login)
+	router.POST("/sessioncreate", controllers.SessionCreate)
 }

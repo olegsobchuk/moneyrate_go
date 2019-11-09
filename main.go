@@ -4,6 +4,8 @@ import (
 	"flag"
 	"time"
 
+	"moneyrate/config"
+	"moneyrate/model"
 	"moneyrate/routes"
 
 	"github.com/gin-contrib/cors"
@@ -15,6 +17,10 @@ var serverPort string
 func main() {
 	flag.StringVar(&serverPort, "p", "9000", "server port")
 	flag.Parse()
+
+	config.InitDB()
+
+	config.DB.AutoMigrate(&model.User{})
 
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{

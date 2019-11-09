@@ -1,13 +1,23 @@
 package model
 
-import "time"
+import (
+	"database/sql"
+
+	"moneyrate/config"
+
+	"github.com/jinzhu/gorm"
+)
 
 // User describes Users attributes
 type User struct {
+	gorm.Model
 	Email                string `form:"email" json:"user" binding:"required"`
 	Password             string `form:"password" json:"password"`
 	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation"`
-	encPassword          string
-	UpdatedAt            time.Time `form:"updated_at" json:"updated_at"`
-	CreatedAt            time.Time `form:"created_at" json:"created_at"`
+	encPassword          *sql.NullString
+}
+
+// Create is a function which insert User into DB
+func (u *User) Create() {
+	config.DB.Create(u)
 }
