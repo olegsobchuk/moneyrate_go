@@ -12,9 +12,9 @@ import (
 type User struct {
 	gorm.Model
 	Email                string `form:"email" json:"user" binding:"required"`
-	Password             string `form:"password" json:"password"`
-	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation"`
-	encPassword          *sql.NullString
+	Password             string `form:"password" json:"password" gorm:"-"`
+	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" gorm:"-"`
+	EncPassword          *sql.NullString
 }
 
 // Create is a function which insert User into DB

@@ -5,6 +5,7 @@ import (
 
 	"moneyrate/config"
 	"moneyrate/model"
+	"moneyrate/service/token"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,10 +33,25 @@ func SessionCreate(c *gin.Context) {
 		return
 	}
 
-	config.DB.Where("email = ? AND password = ?", user.Email, user.Password).First(&user)
+	config.DB.Where("email = ?", user.Email).First(&user)
 	if user.ID != 0 {
-		c.JSON(http.StatusOK, gin.H{"message": "OK"})
+		jwt, err := token.New(map[string]interface{}{"userID": user.ID})
+		if err != nil {
+			panic("can't generate jwt token")
+		}
+		c.JSON(http.StatusOK, gin.H{"token": jwt})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Not found"})
+	c.JSON(http.StatusBadRequest, gin.H{"error": "Not found"})
+}
+
+// CheckToken - should be rewritten
+func CheckToken(c *gin.Context) (int, error) {
+	receivedToken := c.Request.Header["Token"][0]
+	jwt, err := token.Parse(receivedToken)
+	if err != nil {
+		return 0, err
+	}
+
+	return jwt["userID"].(int), nil
 }
